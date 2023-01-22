@@ -10,6 +10,8 @@ prog_ver="0.1alpha"
 import tkinter as gui
 # Import "zipfile" module from python
 import zipfile
+# import package os
+import os
 
 # compress_file definition/function
 def compress_file(filenm):
@@ -24,6 +26,16 @@ def decompress_file(compressed_filenm):
     with zipfile.ZipFile(compressed_filenm, 'r') as zip:
         # Decompress the file name provided to a folder named "extracted"
         zip.extractall(path="extracted")
+
+# display original file size definition/function
+def display_filesize(filenm):
+    ogfilesize = (os.path.getsize(filenm))/1024
+    print(f'{round(ogfilesize,2)} kb')
+
+# display compressed file size definition/function
+def display_compressedfilesize(compressed_filenm):
+    compfilesize = (os.path.getsize(compressed_filenm)/1024
+    print(f'{round(compfilesize,2)} kb')
 
 window = gui.Tk()
 window.title(prog_nm+"-("+prog_ver+")")
