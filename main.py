@@ -59,8 +59,8 @@ header = gui.Label(window, text=prog_nm+"-"+prog_ver, height=5, font="Helvetica 
 header.pack()
 button_browse=gui.Button(window, text="File", command=file_browser)
 button_browse.pack()
-button_extract = gui.Button(window, text = "Compress", command = lambda: compress_file(filesrc))
-button_extract.pack()
+button_compress = gui.Button(window, text = "Compress", command = lambda: compress_file(filesrc))
+button_compress.pack()
 
 label_sz = gui.Label(window, text = "No file selected.", width = 100, height = 4, fg = "blue")
 label_sz.pack()
