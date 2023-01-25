@@ -8,42 +8,46 @@ prog_ver="0.1alpha"
 
 # Import front-end framework
 import tkinter as gui
+from tkinter.filedialog import askopenfilename
 # Import "zipfile" module from python
 import zipfile
 # import package os
 import os
 
+filesrc=""
+filenm=""
+zipnm=""
+
+def file_browser(event=None):
+    global filesrc, filenm, zipnm
+    filesrc = askopenfilename()
+    filenm = filesrc.split('/')[len(filesrc.split('/'))-1]
+    zipnm = os.path.splitext(filenm)[0]
+
 # compress_file definition/function
-def compress_file(filenm):
+def compress_file(filesrc):
     # Initialize the compression parameters
-    with zipfile.ZipFile('test.zip', 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zip:
+    with zipfile.ZipFile(zipnm+".zip", 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zip:
         # Compress based on the file name provided
-        zip.write(filenm)
-
-    # display original file size definition/function
-    def display_filesize(filenm):
-        ogfilesize = (os.path.getsize(filenm)) / 1024
-        ogfilesize = round(ogfilesize, 2)
-        ogfile = str(ogfilesize)
-
-        return ogfile
-
-    # display compressed file size definition/function
-    def display_compressedfilesize(compressed_filenm):
-        compfilesize = (os.path.getsize(compressed_filenm)) / 1024
-        compfilesize = round(compfilesize, 2)
-        compfile = str(compfilesize)
-
-        return compfile
-
-    # ogfile = display_filesize(filenm)
+        zip.write(filesrc, arcname=filenm)
+        # display original file size definition/function
+        def display_filesize(filesrc):
+            ogfilesize = (os.path.getsize(filesrc)) / 1024
+            ogfilesize = round(ogfilesize, 2)
+            ogfile = str(ogfilesize)
+            return ogfile
+        # display compressed file size definition/function
+        def display_compressedfilesize(compressed_filenm):
+            compfilesize = (os.path.getsize(compressed_filenm)) / 1024
+            compfilesize = round(compfilesize, 2)
+            compfile = str(compfilesize)
+            return compfile
+    ogfile = display_filesize(filenm)
     # compfile = display_compressedfilesize(compressed_filenm)
-
-    # label_sz.configure(text="Original file size is " + ogfile + " kb" + "\n\n Compressed file size is ")
+    label_sz.configure(text="Original file size is " + ogfile + " kb" + "\n\n Compressed file size is ")
 
 # decompress_file definition/function
 def decompress_file(compressed_filenm):
-    
     # Initialize the decompression parameters
     with zipfile.ZipFile(compressed_filenm, 'r') as zip:
         # Decompress the file name provided to a folder named "extracted"
@@ -53,10 +57,12 @@ window = gui.Tk()
 window.title(prog_nm+"-("+prog_ver+")")
 header = gui.Label(window, text=prog_nm+"-"+prog_ver, height=5, font="Helvetica 20 bold")
 header.pack()
-button_extract = gui.Button(window, text = "Compress", command = lambda: compress_file("testfile.txt"))
+button_browse=gui.Button(window, text="File", command=file_browser)
+button_browse.pack()
+button_extract = gui.Button(window, text = "Compress", command = lambda: compress_file(filesrc))
 button_extract.pack()
 
-label_sz = gui.Label(window, text = "", width = 100, height = 4, fg = "blue")
+label_sz = gui.Label(window, text = "No file selected.", width = 100, height = 4, fg = "blue")
 label_sz.pack()
 
 exit_button = gui.Button(window, text='Exit', command=window.destroy)
