@@ -47,9 +47,9 @@ def compress_file(filesrc):
     label_sz.configure(text="Original file size is " + ogfile + "Kb" + "\n\n Compressed file size is "+compfile+"Kb.")
 
 # decompress_file definition/function
-def decompress_file(compressed_filenm):
+def decompress_file():
     # Initialize the decompression parameters
-    with zipfile.ZipFile(compressed_filenm, 'r') as zip:
+    with zipfile.ZipFile(zipnm, 'r') as zip:
         # Decompress the file name provided to a folder named "extracted"
         zip.extractall(path="extracted")
 
@@ -61,7 +61,8 @@ button_browse=gui.Button(window, text="File", command=file_browser)
 button_browse.pack()
 button_compress = gui.Button(window, text = "Compress", command = lambda: compress_file(filesrc))
 button_compress.pack()
-
+button_decompress= gui.Button(window, text = "Decompress", command=decompress_file)
+button_decompress.pack()
 label_sz = gui.Label(window, text = "No file selected.", width = 100, height = 4, fg = "blue")
 label_sz.pack()
 
