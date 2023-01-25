@@ -22,12 +22,12 @@ def file_browser(event=None):
     global filesrc, filenm, zipnm
     filesrc = askopenfilename()
     filenm = filesrc.split('/')[len(filesrc.split('/'))-1]
-    zipnm = os.path.splitext(filenm)[0]
+    zipnm = os.path.splitext(filenm)[0]+".zip"
 
 # compress_file definition/function
 def compress_file(filesrc):
     # Initialize the compression parameters
-    with zipfile.ZipFile(zipnm+".zip", 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zip:
+    with zipfile.ZipFile(zipnm, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zip:
         # Compress based on the file name provided
         zip.write(filesrc, arcname=filenm)
         # display original file size definition/function
@@ -37,14 +37,14 @@ def compress_file(filesrc):
             ogfile = str(ogfilesize)
             return ogfile
         # display compressed file size definition/function
-        def display_compressedfilesize(compressed_filenm):
-            compfilesize = (os.path.getsize(compressed_filenm)) / 1024
+        def display_compressedfilesize(zipnm):
+            compfilesize = (os.path.getsize(zipnm)) / 1024
             compfilesize = round(compfilesize, 2)
             compfile = str(compfilesize)
             return compfile
     ogfile = display_filesize(filenm)
-    # compfile = display_compressedfilesize(compressed_filenm)
-    label_sz.configure(text="Original file size is " + ogfile + " kb" + "\n\n Compressed file size is ")
+    compfile = display_compressedfilesize(zipnm)
+    label_sz.configure(text="Original file size is " + ogfile + "Kb" + "\n\n Compressed file size is "+compfile+"Kb.")
 
 # decompress_file definition/function
 def decompress_file(compressed_filenm):
